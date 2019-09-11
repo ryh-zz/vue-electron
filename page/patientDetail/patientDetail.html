@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>患者详情</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="./patientDetail.css">
+    <script src="../../utils/vue.min.js"></script>
+    <script src="../../utils/jquery.min.js"></script>
+    <style>
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="main">
+            <div> <span>患者姓名</span><span>{{patient.name}}</span></div>
+            <div> <span>出生年月</span><span>{{patient.birth_date}}</span></div>
+            <button @click="submit">确认报道</button>
+            <button @click="returnHome">返回重新扫码</button>
+            <div v-if="succeed">
+                <div>123</div>
+                <div>报道成功</div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="./patientDetail.js"></script>
+
+</html>

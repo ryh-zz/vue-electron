@@ -1,0 +1,19 @@
+{
+  "name": "scan",
+  "version": "1.0.0",
+  "description": "扫码登记",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "pack": "electron-packager . myClient --win --out ./myClient --arch=ia32 --app-version=0.0.1 --electron-version=2.0.0"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^6.0.8"
+  },
+  "dependencies": {
+    "js-md5": "^0.7.3"
+  }
+}
