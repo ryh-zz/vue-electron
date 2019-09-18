@@ -22,18 +22,28 @@ export default {
     };
   },
   methods: {
-    submit() {
+    async submit() {
       this.loading = true;
       const data = { patient_pid: `${this.patient_pid}` };
-      this.$axios.axiosPost("/service/go/post/patient_report", data, res => {
-        if (res.data.error_code === "success") {
-          this.$message({ message: "报道成功", type: "success" });
-          this.patient_name = res.data.patient_name;
-        } else{
-          this.$message.error({ message: res.data.error_code});
+      const setTimeOut = setTimeout(() => {
+        if ((this.loading === true)) {
+          this.loading = false;
+          this.$message.error({ message: "请求超时" });
         }
-        this.loading = false;
-      });
+        clearTimeout(setTimeOut);
+      }, 5000);
+      const res = await this.$axios.axiosPost(
+        "/service/go/post/patient_report",
+        data
+      );
+      if (!res) return;
+      if (res.error_code === "success") {
+        this.$message({ message: "报道成功", type: "success" });
+        this.patient_name = res.patient_name;
+      } else {
+        this.$message.error({ message: res.error_code });
+      }
+      this.loading = false;
     },
     goHome() {
       this.$router.push("/home");

@@ -6,20 +6,45 @@
       <el-button style="float: right; padding: 3px 0" type="text" @click="goHome">返回</el-button>
     </div>
     <el-row :gutter="20" type="flex" align="middle">
-      <el-col :span="6">
+      <el-col :span="4">
         <div class="grid-content bg-purple">服务器IP：</div>
       </el-col>
-      <el-col :span="14">
+      <el-col :span="4">
         <div class="grid-content bg-purple">
-          <el-input class="home-input" v-model="IP" type="text"></el-input>
+          <el-input class="home-input" v-model="IP1" type="text" disabled></el-input>
+        </div>
+      </el-col>
+      <el-col :span="4">
+        <div class="grid-content bg-purple">
+          <el-input class="home-input" v-model="IP2" type="text" disabled></el-input>
+        </div>
+      </el-col>
+      <el-col :span="4">
+        <div class="grid-content bg-purple">
+          <el-input class="home-input" v-model="IP3" type="text" disabled></el-input>
+        </div>
+      </el-col>
+      <el-col :span="4">
+        <div class="grid-content bg-purple">
+          <el-input-number class="home-input" type="number" v-model="IP4" :min="0" :max="255" controls-position="right" style="width:auto;"></el-input-number>
         </div>
       </el-col>
     </el-row>
     <el-row :gutter="20" type="flex" align="middle">
-      <el-col :span="6">
+      <el-col :span="4">
+        <div class="grid-content bg-purple">端口号</div>
+      </el-col>
+      <el-col :span="16">
+        <div class="grid-content bg-purple">
+          <el-input-number class="home-input" type="number" v-model="port" :min="0" :max="65534" controls-position="right" style="width:auto;"></el-input-number>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20" type="flex" align="middle">
+      <el-col :span="4">
         <div class="grid-content bg-purple">session_id</div>
       </el-col>
-      <el-col :span="14">
+      <el-col :span="16">
         <div class="grid-content bg-purple">
           <el-input class="home-input" v-model="session_id" type="password"></el-input>
         </div>
@@ -34,13 +59,19 @@ export default {
   name: "Home",
   data() {
     return {
-      IP: "",
+      IP1: 192,
+      IP2: 168,
+      IP3: 1,
+      IP4: 0,
+      IP:'',
+      port:80,
       session_id: "",
       dialogVisible: true
     };
   },
   methods: {
     submit() {
+      this.IP = `192.168.1.${this.IP4}:${this.port}`;
       this.vueSubmit();
       this.electronSubmit();
     },
@@ -59,7 +90,7 @@ export default {
     },
     goHome() {
       this.$router.push("/home");
-    },
+    }
   },
   mounted() {
     this.IP = localStorage.IP;

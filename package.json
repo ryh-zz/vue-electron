@@ -1,11 +1,11 @@
 {
-  "name": "my-project",
+  "name": "report",
   "version": "0.0.1",
   "author": "RYH <ryh19@qq.com>",
   "description": "An electron-vue project",
   "main": "./dist/electron/main.js",
   "scripts": {
-    "build": "node .electron-vue/build.js && electron-builder",
+    "build": "node .electron-vue/build.js && electron-builder --platform=win32 --arch=ia32",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
     "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
@@ -16,7 +16,7 @@
     "postinstall": ""
   },
   "build": {
-    "productName": "my-project",
+    "productName": "report",
     "appId": "com.example.yourapp",
     "directories": {
       "output": "build"
@@ -47,6 +47,12 @@
     },
     "linux": {
       "icon": "build/icons"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
     }
   },
   "dependencies": {
