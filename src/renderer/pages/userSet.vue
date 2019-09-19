@@ -9,22 +9,22 @@
       <el-col :span="4">
         <div class="grid-content bg-purple">服务器IP：</div>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="3">
         <div class="grid-content bg-purple">
           <el-input class="home-input" v-model="IP1" type="text" disabled></el-input>
         </div>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="3">
         <div class="grid-content bg-purple">
           <el-input class="home-input" v-model="IP2" type="text" disabled></el-input>
         </div>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="3">
         <div class="grid-content bg-purple">
           <el-input class="home-input" v-model="IP3" type="text" disabled></el-input>
         </div>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="7">
         <div class="grid-content bg-purple">
           <el-input-number class="home-input" type="number" v-model="IP4" :min="0" :max="255" controls-position="right" style="width:auto;"></el-input-number>
         </div>
@@ -93,7 +93,9 @@ export default {
     }
   },
   mounted() {
-    this.IP = localStorage.IP;
+    const arryIP = localStorage.IP.split(":")
+    this.IP4 = Number(arryIP[0].split(".")[3]);
+    this.port = Number(arryIP[1]);
     this.session_id = localStorage.session_id;
   }
 };

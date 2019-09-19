@@ -14,6 +14,9 @@ npm run dev
 # build electron application for production
 npm run build
 
+# build 文件夹下 
+report Setup 0.0.1
+
 
 ```
 

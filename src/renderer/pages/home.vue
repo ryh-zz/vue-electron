@@ -15,7 +15,7 @@
         type="text"
         placeholder="请扫码"
         v-model="inputValue"
-        ref="input"
+        ref="codeInput"
         class="home-card-input"
         @keyup.enter="submit"
       />
@@ -29,7 +29,7 @@
       />
       <div @click.stop style="text-align: center;">
         <el-button type="primary" v-if="visible" @click="submit" class="home-card-submit">submit</el-button>
-        <el-button type="primary" v-else @click="show">手动输入</el-button>
+        <!-- <el-button type="primary" v-else @click="show">手动输入</el-button> -->
       </div>
     </el-card>
   </div>
@@ -42,7 +42,7 @@ export default {
     return {
       inputValue: "",
 
-      visible: false,
+      visible: true,
       layout: "normal",
       input: null,
       options: {
@@ -53,6 +53,10 @@ export default {
   },
   methods: {
     submit() {
+      if(this.inputValue === ''){
+        this.$message.error('请输入您的报道码');
+         return;
+      }
       this.$router.push(`/patientDetail/${this.inputValue}`);
     },
 
@@ -61,24 +65,26 @@ export default {
     },
 
     getFocus() {
-      this.$refs.input.focus();
+      this.$refs.codeInput.focus();
     },
 
     accept(text) {
       this.hide();
     },
 
-    show(e) {
-      this.input = this.$refs.input;
-      if (!this.visible) this.visible = true;
-    },
+    // show(e) {
+    //   this.input = this.$refs.codeInput;
+    //   if (!this.visible) this.visible = true;
+    // },
 
     hide() {
-      this.visible = false;
+      return;
+      // this.visible = false;
     }
   },
   mounted() {
-    this.$refs.input.focus();
+    this.input = this.$refs.codeInput;
+    this.$refs.codeInput.focus();
   }
 };
 </script>
