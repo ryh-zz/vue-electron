@@ -26,7 +26,15 @@
       </el-col>
       <el-col :span="7">
         <div class="grid-content bg-purple">
-          <el-input-number class="home-input" type="number" v-model="IP4" :min="0" :max="255" controls-position="right" style="width:auto;"></el-input-number>
+          <el-input-number
+            class="home-input"
+            type="number"
+            v-model="IP4"
+            :min="0"
+            :max="255"
+            controls-position="right"
+            style="width:auto;"
+          ></el-input-number>
         </div>
       </el-col>
     </el-row>
@@ -36,7 +44,15 @@
       </el-col>
       <el-col :span="16">
         <div class="grid-content bg-purple">
-          <el-input-number class="home-input" type="number" v-model="port" :min="0" :max="65534" controls-position="right" style="width:auto;"></el-input-number>
+          <el-input-number
+            class="home-input"
+            type="number"
+            v-model="port"
+            :min="0"
+            :max="65534"
+            controls-position="right"
+            style="width:auto;"
+          ></el-input-number>
         </div>
       </el-col>
     </el-row>
@@ -50,7 +66,9 @@
         </div>
       </el-col>
     </el-row>
-    <el-button type="primary" @click="submit">确定修改</el-button>
+    <div class="submit-div">
+      <el-button type="primary" @click="submit" class="submit">确定修改</el-button>
+    </div>
   </el-card>
 </template>
 <script>
@@ -63,8 +81,8 @@ export default {
       IP2: 168,
       IP3: 1,
       IP4: 0,
-      IP:'',
-      port:80,
+      IP: "",
+      port: 80,
       session_id: "",
       dialogVisible: true
     };
@@ -93,7 +111,7 @@ export default {
     }
   },
   mounted() {
-    const arryIP = localStorage.IP.split(":")
+    const arryIP = localStorage.IP.split(":");
     this.IP4 = Number(arryIP[0].split(".")[3]);
     this.port = Number(arryIP[1]);
     this.session_id = localStorage.session_id;

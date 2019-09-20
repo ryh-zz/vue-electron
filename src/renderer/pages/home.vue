@@ -27,15 +27,15 @@
         :accept="accept"
         :input="input"
       />
-      <div @click.stop style="text-align: center;">
-        <el-button type="primary" v-if="visible" @click="submit" class="home-card-submit">submit</el-button>
+      <div @click.stop class="submit-div">
+        <el-button type="primary" v-if="visible" @click="submit" class="submit">submit</el-button>
         <!-- <el-button type="primary" v-else @click="show">手动输入</el-button> -->
       </div>
     </el-card>
   </div>
 </template>
 <script>
-import style from "vue-touch-keyboard/dist/vue-touch-keyboard.css";
+
 export default {
   name: "Home",
   data() {
@@ -53,9 +53,10 @@ export default {
   },
   methods: {
     submit() {
-      if(this.inputValue === ''){
-        this.$message.error('请输入您的报道码');
-         return;
+      if (this.inputValue === "") {
+        this.$message.error("请输入您的报道码");
+        this.$refs.codeInput.focus();
+        return;
       }
       this.$router.push(`/patientDetail/${this.inputValue}`);
     },
@@ -116,16 +117,6 @@ export default {
       -webkit-transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
       transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
       width: 100%;
-    }
-    &-submit {
-      margin-top: 8px;
-      color: #fff;
-      background-color: #337ab7;
-      border-color: #2e6da4;
-      width: 160px;
-      height: 46px;
-      border-radius: 0.35em;
-      font-size: 1.25em;
     }
   }
 }

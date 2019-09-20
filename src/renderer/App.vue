@@ -51,7 +51,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
 * {
   margin: 0;
   padding: 0;
@@ -77,6 +77,7 @@ body {
   justify-content: center;
 }
 
+/* 路由动画 */
 .child-view {
   position: absolute;
   transition: all 0.4s;
@@ -92,6 +93,20 @@ body {
   opacity: 0;
   -webkit-transform: translate(-100%, 0);
   transform: translate(-100%, 0);
+}
+/* 公共样式 */
+.submit-div {
+  margin-top: 20px;
+  .submit {
+    margin-top: 8px;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    width: 100%;
+    height: 50px;
+    border-radius: 0.35em;
+    font-size: 1.25em;
+  }
 }
 </style>
 
