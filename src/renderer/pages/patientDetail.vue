@@ -2,7 +2,7 @@
 <template>
   <el-card class="patientDetail">
     <div slot="header" class="clearfix">
-      <span>报道信息</span>
+      <span>报到信息</span>
       <el-button style="float: right; padding: 3px 0" type="text" @click="goHome()">返回首页</el-button>
     </div>
     <div class="patientDetail-detail" v-loading="loading" :element-loading-text="loadingText">
@@ -11,12 +11,12 @@
         :class="patient_name?'background-succeed':'background-error'"
       >
         <div v-if="patient_name">
-          <h3><i class="el-notification__icon el-icon-success"></i> 报道成功</h3>
-          <p>{{patient_name}} 您已报道成功！</p>
+          <h3><i class="el-notification__icon el-icon-success"></i> 报到成功</h3>
+          <p>{{patient_name}} 您已报到成功！</p>
           <p>将在 {{time}}S 后返回主界面</p>
         </div>
         <div v-if="!patient_name && !loading">
-          <h3><i class="el-notification__icon el-icon-error"></i> 报道失败</h3>
+          <h3><i class="el-notification__icon el-icon-error"></i> 报到失败</h3>
           <p>错误码：{{erroCode}}</p>
           <p>将在 {{time}}S 后返回主界面</p>
         </div>
@@ -34,7 +34,7 @@ export default {
       patient_name: "",
       erroCode: "",
       loading: false,
-      loadingText: "如果加载时间过长 请返回重新报道！",
+      loadingText: "如果加载时间过长 请返回重新报到！",
       time: 5
     };
   },

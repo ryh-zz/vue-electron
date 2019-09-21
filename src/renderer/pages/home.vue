@@ -3,7 +3,7 @@
   <div @click="getFocus" class="home">
     <el-card class="home-card">
       <div slot="header" class="clearfix">
-        <span>报道</span>
+        <span>报到</span>
         <el-button
           @click.stop
           style="float: right; padding: 3px 0"
@@ -60,7 +60,7 @@ export default {
   methods: {
     submit() {
       if (this.inputValue === "") {
-        this.$message.error("请输入您的报道码");
+        this.$message.error("请输入您的报到码");
         this.$refs.codeInput.focus();
         return;
       }
