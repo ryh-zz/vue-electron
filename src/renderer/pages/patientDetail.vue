@@ -46,7 +46,6 @@ export default {
         "/service/go/post/patient_report",
         data
       );
-      console.log(res);
       if (res.error_code === "success") {
         this.patient_name = res.patient_name;
       } else {

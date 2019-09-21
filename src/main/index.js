@@ -46,8 +46,12 @@ app.on('activate', () => {
 })
 
 ipcMain.on('main-message', function (event, arg) {
-  console.log(arg);
-  setCookies(arg.url, arg.name, arg.value)
+  if(arg.demand === 'session'){
+    setCookies(arg.url, arg.name, arg.value)
+  };
+  if(arg.demand === 'close'){
+    mainWindow.close();
+  }
 })
 
 // 设置 cookies 

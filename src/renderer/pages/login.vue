@@ -49,11 +49,13 @@ export default {
     submitForm() {
       localStorage.IP = this.formLabelAlign.IP;
       axios.defaults.baseURL = `http://${this.formLabelAlign.IP}`;
+      localStorage.password = '123';
       localStorage.session_id = this.formLabelAlign.session_id;
       this.electronSubmit();
     },
     electronSubmit() {
       this.$electron.ipcRenderer.send("main-message", {
+        demand:'session',
         url: `http://${this.formLabelAlign.IP}`,
         name: "session_id",
         value: this.formLabelAlign.session_id

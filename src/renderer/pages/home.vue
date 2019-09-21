@@ -32,16 +32,22 @@
         <!-- <el-button type="primary" v-else @click="show">手动输入</el-button> -->
       </div>
     </el-card>
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
-
 export default {
   name: "Home",
   data() {
     return {
+      dialogVisible: false,
       inputValue: "",
-
       visible: true,
       layout: "normal",
       input: null,
@@ -69,14 +75,13 @@ export default {
       this.$refs.codeInput.focus();
     },
 
+    handleClose() {
+      dialogVisible = false;
+    },
+
     accept(text) {
       this.hide();
     },
-
-    // show(e) {
-    //   this.input = this.$refs.codeInput;
-    //   if (!this.visible) this.visible = true;
-    // },
 
     hide() {
       return;

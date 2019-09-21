@@ -5,70 +5,99 @@
       <span>设置</span>
       <el-button style="float: right; padding: 3px 0" type="text" @click="goHome">返回</el-button>
     </div>
-    <el-row :gutter="20" type="flex" align="middle">
-      <el-col :span="4">
-        <div class="grid-content bg-purple">服务器IP：</div>
-      </el-col>
-      <el-col :span="3">
-        <div class="grid-content bg-purple">
-          <el-input class="home-input" v-model="IP1" type="text" disabled></el-input>
+    <template v-if="!adminTrue">
+      <div>
+        <el-row :gutter="24" type="flex" align="middle">
+          <el-col :span="4">
+            <div class="grid-content bg-purple">管理员密码</div>
+          </el-col>
+          <el-col :span="20">
+            <div class="grid-content bg-purple">
+              <el-input
+                class="home-input"
+                v-model="verifyPassword"
+                type="password"
+                @focus="getFocus($event)"
+              ></el-input>
+            </div>
+          </el-col>
+        </el-row>
+        <div class="submit-div">
+          <el-button type="primary" @click="adminVerify" class="submit">确定</el-button>
         </div>
-      </el-col>
-      <el-col :span="3">
-        <div class="grid-content bg-purple">
-          <el-input class="home-input" v-model="IP2" type="text" disabled></el-input>
-        </div>
-      </el-col>
-      <el-col :span="3">
-        <div class="grid-content bg-purple">
-          <el-input class="home-input" v-model="IP3" type="text" disabled></el-input>
-        </div>
-      </el-col>
-      <el-col :span="7">
-        <div class="grid-content bg-purple">
-          <el-input-number
-            class="home-input"
-            type="number"
-            v-model="IP4"
-            :min="0"
-            :max="255"
-            controls-position="right"
-            style="width:auto;"
-          ></el-input-number>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20" type="flex" align="middle">
-      <el-col :span="4">
-        <div class="grid-content bg-purple">端口号</div>
-      </el-col>
-      <el-col :span="16">
-        <div class="grid-content bg-purple">
-          <el-input-number
-            class="home-input"
-            type="number"
-            v-model="port"
-            :min="0"
-            :max="65534"
-            controls-position="right"
-            style="width:auto;"
-          ></el-input-number>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20" type="flex" align="middle">
-      <el-col :span="4">
-        <div class="grid-content bg-purple">session_id</div>
-      </el-col>
-      <el-col :span="16">
-        <div class="grid-content bg-purple">
-          <el-input class="home-input" v-model="session_id" type="password"></el-input>
-        </div>
-      </el-col>
-    </el-row>
-    <div class="submit-div">
-      <el-button type="primary" @click="submit" class="submit">确定修改</el-button>
-    </div>
+      </div>
+    </template>
+    <template v-else>
+      <el-row :gutter="24" type="flex" align="middle">
+        <el-col :span="4">
+          <div class="grid-content bg-purple">新的管理员密码：</div>
+        </el-col>
+        <el-col :span="20">
+          <div class="grid-content bg-purple">
+            <el-input
+              class="home-input"
+              v-model="password"
+              type="password"
+              @focus="getFocus($event)"
+            ></el-input>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="24" type="flex" align="middle">
+        <el-col :span="4">
+          <div class="grid-content bg-purple">服务器IP：</div>
+        </el-col>
+        <el-col :span="20">
+          <div class="grid-content bg-purple">
+            <el-input class="home-input" v-model="IP" @focus="getFocus($event)"></el-input>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="24" type="flex" align="middle">
+        <el-col :span="4">
+          <div class="grid-content bg-purple">端口号</div>
+        </el-col>
+        <el-col :span="20">
+          <div class="grid-content bg-purple">
+            <el-input
+              class="home-input"
+              v-model="port"
+              style="width:auto;"
+              @focus="getFocus($event)"
+            ></el-input>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="24" type="flex" align="middle">
+        <el-col :span="4">
+          <div class="grid-content bg-purple">session_id</div>
+        </el-col>
+        <el-col :span="20">
+          <div class="grid-content bg-purple">
+            <el-input
+              class="home-input"
+              v-model="session_id"
+              type="password"
+              @focus="getFocus($event)"
+            ></el-input>
+          </div>
+        </el-col>
+      </el-row>
+      <div class="submit-div">
+        <el-button type="primary" @click="submit" class="submit">确定修改</el-button>
+      </div>
+      <div class="submit-div close">
+        <el-button type="primary" @click="appClose" class="submit">关闭程序</el-button>
+      </div>
+    </template>
+    <vue-touch-keyboard
+      :options="options"
+      v-if="visible"
+      :layout="layout"
+      :cancel="hide"
+      :accept="accept"
+      :input="input"
+    />
   </el-card>
 </template>
 <script>
@@ -77,29 +106,38 @@ export default {
   name: "Home",
   data() {
     return {
-      IP1: 192,
-      IP2: 168,
-      IP3: 1,
-      IP4: 0,
+      verifyPassword: "",
+      adminTrue: false,
+
       IP: "",
-      port: 80,
+      port: "80",
       session_id: "",
-      dialogVisible: true
+      password: "",
+
+      visible: false,
+      layout: "normal",
+      input: null,
+      options: {
+        useKbEvents: false,
+        preventClickEvent: false
+      }
     };
   },
   methods: {
     submit() {
-      this.IP = `192.168.1.${this.IP4}:${this.port}`;
       this.vueSubmit();
       this.electronSubmit();
     },
     vueSubmit() {
-      localStorage.IP = this.IP;
+      const IP = `${this.IP}:${this.port}`;
+      localStorage.IP = IP;
       localStorage.session_id = this.session_id;
-      axios.defaults.baseURL = `http://${localStorage.IP}`;
+      localStorage.password = this.password;
+      axios.defaults.baseURL = `http://${IP}`;
     },
     electronSubmit() {
       this.$electron.ipcRenderer.send("main-message", {
+        demand: "session",
         url: `http://${this.IP}`,
         name: "session_id",
         value: this.session_id
@@ -108,12 +146,40 @@ export default {
     },
     goHome() {
       this.$router.push("/home");
+    },
+
+    getFocus(event) {
+      if (!this.visible) this.visible = true;
+      this.input = event.target;
+    },
+
+    adminVerify() {
+      if (this.verifyPassword === localStorage.password) {
+        this.password = this.verifyPassword;
+        this.adminTrue = true;
+      } else {
+        this.$message.error("管理员密码不正确");
+      }
+    },
+
+    appClose() {
+      this.$electron.ipcRenderer.send("main-message", {
+        demand: "close"
+      });
+    },
+
+    accept(text) {
+      this.hide();
+    },
+
+    hide() {
+      this.visible = false;
     }
   },
   mounted() {
     const arryIP = localStorage.IP.split(":");
-    this.IP4 = Number(arryIP[0].split(".")[3]);
-    this.port = Number(arryIP[1]);
+    this.IP = arryIP[0];
+    this.port = arryIP[1] || "80";
     this.session_id = localStorage.session_id;
   }
 };
@@ -123,8 +189,15 @@ export default {
   width: 80%;
   height: 80vh;
   margin: 30px auto;
+  position: relative;
   .el-row {
     margin-bottom: 10px;
+  }
+  .close {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
   }
 }
 </style>

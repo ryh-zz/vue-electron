@@ -96,7 +96,7 @@ body {
 }
 /* 公共样式 */
 .submit-div {
-  margin-top: 20px;
+  margin: 20px 0;
   .submit {
     margin-top: 8px;
     color: #fff;
