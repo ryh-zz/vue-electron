@@ -52,9 +52,13 @@ export default {
   },
   methods: {
     async submit() {
-      console.log(111);
+      // 防抖
+      if (this.inputValue === "" && this.errorCode === "请输入报到码") {
+        return;
+      }
       if (this.inputValue === "") {
         this.errorCode = "请输入报到码";
+        this.delayedTime();
         return;
       }
       this.loading = true;
@@ -70,9 +74,14 @@ export default {
         this.errorCode = "患者不存在!";
       }
       this.loading = false;
-      clearTimeout(timeObj);
+      this.inputValue = "";
+      this.delayedTime();
+    },
+
+    delayedTime() {
       const timeObj = setTimeout(() => {
         this.errorCode = "";
+        clearTimeout(timeObj);
       }, 5000);
     },
 
