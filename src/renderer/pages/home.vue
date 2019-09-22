@@ -52,6 +52,7 @@ export default {
   },
   methods: {
     async submit() {
+      console.log(111);
       if (this.inputValue === "") {
         this.errorCode = "请输入报到码";
         return;
@@ -65,10 +66,14 @@ export default {
       if (res.error_code === "report exist") {
         this.errorCode = "您已经报到过了!";
       }
-      if(res.error_code.indexOf("patient not exist") != -1){
+      if (res.error_code.indexOf("patient not exist") !== -1) {
         this.errorCode = "患者不存在!";
       }
       this.loading = false;
+      clearTimeout(timeObj);
+      const timeObj = setTimeout(() => {
+        this.errorCode = "";
+      }, 5000);
     },
 
     goUserSet() {
@@ -144,7 +149,7 @@ export default {
     width: 100%;
     bottom: 100px;
   }
-  &-set{
+  &-set {
     width: 50px;
     height: 50px;
     position: absolute;
