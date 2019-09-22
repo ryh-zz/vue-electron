@@ -8,10 +8,10 @@
     <template v-if="!adminTrue">
       <div>
         <el-row :gutter="24" type="flex" align="middle">
-          <el-col :span="4">
-            <div class="grid-content bg-purple">管理员密码</div>
+          <el-col :span="6">
+            <div class="grid-content bg-purple">管理员密钥</div>
           </el-col>
-          <el-col :span="20">
+          <el-col :span="18">
             <div class="grid-content bg-purple">
               <el-input
                 class="home-input"
@@ -29,35 +29,20 @@
     </template>
     <template v-else>
       <el-row :gutter="24" type="flex" align="middle">
-        <el-col :span="4">
-          <div class="grid-content bg-purple">新的管理员密码：</div>
-        </el-col>
-        <el-col :span="20">
-          <div class="grid-content bg-purple">
-            <el-input
-              class="home-input"
-              v-model="password"
-              type="password"
-              @focus="getFocus($event)"
-            ></el-input>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row :gutter="24" type="flex" align="middle">
-        <el-col :span="4">
+        <el-col :span="6">
           <div class="grid-content bg-purple">服务器IP：</div>
         </el-col>
-        <el-col :span="20">
+        <el-col :span="18">
           <div class="grid-content bg-purple">
             <el-input class="home-input" v-model="IP" @focus="getFocus($event)"></el-input>
           </div>
         </el-col>
       </el-row>
       <el-row :gutter="24" type="flex" align="middle">
-        <el-col :span="4">
+        <el-col :span="6">
           <div class="grid-content bg-purple">端口号</div>
         </el-col>
-        <el-col :span="20">
+        <el-col :span="18">
           <div class="grid-content bg-purple">
             <el-input
               class="home-input"
@@ -69,10 +54,10 @@
         </el-col>
       </el-row>
       <el-row :gutter="24" type="flex" align="middle">
-        <el-col :span="4">
-          <div class="grid-content bg-purple">session_id</div>
+        <el-col :span="6">
+          <div class="grid-content bg-purple">密钥</div>
         </el-col>
-        <el-col :span="20">
+        <el-col :span="18">
           <div class="grid-content bg-purple">
             <el-input
               class="home-input"
@@ -83,7 +68,7 @@
           </div>
         </el-col>
       </el-row>
-      <div class="submit-div">
+      <div class="submit-div" v-loading="isloading">
         <el-button type="primary" @click="submit" class="submit">确定修改</el-button>
       </div>
       <div class="submit-div close">
@@ -106,6 +91,7 @@ export default {
   name: "Home",
   data() {
     return {
+      isloading:false,
       verifyPassword: "",
       adminTrue: false,
 
@@ -125,6 +111,7 @@ export default {
   },
   methods: {
     submit() {
+      this.isloading = true;
       this.vueSubmit();
       this.electronSubmit();
     },
@@ -142,7 +129,7 @@ export default {
         name: "session_id",
         value: this.session_id
       });
-      this.$router.push("/home");
+      this.verifySubmit();
     },
     goHome() {
       this.$router.push("/home");
@@ -154,12 +141,22 @@ export default {
     },
 
     adminVerify() {
-      if (this.verifyPassword === localStorage.password) {
-        this.password = this.verifyPassword;
+      if (this.verifyPassword === this.session_id) {
         this.adminTrue = true;
       } else {
-        this.$message.error("管理员密码不正确");
+        this.$message.error("管理员密钥不正确");
       }
+    },
+
+    async verifySubmit() {
+      const data = {};
+      const res = await this.$axios.patientReport(data);
+      if (res.error_code === "session not valid") {
+        this.$message.error("密钥无效");
+      } else {
+        this.goHome();
+      }
+      this.isloading = true;
     },
 
     appClose() {
@@ -188,7 +185,6 @@ export default {
 .userSet {
   width: 80%;
   height: 80vh;
-  margin: 30px auto;
   position: relative;
   .el-row {
     margin-bottom: 10px;

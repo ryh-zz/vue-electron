@@ -17,7 +17,7 @@ export default {
     };
   },
   mounted: function() {
-    if (localStorage.session_id && localStorage.password) {
+    if (localStorage.session_id) {
       // this.setCookie("session_id", localStorage.session_id, 0);
       this.$router.push("/home");
     }
@@ -66,8 +66,8 @@ body {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #a2a2a2;
-  background: url(./assets/login_bg.png) top left repeat;
+  background-color: #6bd3ff;
+  // background: url(./assets/login_bg.png) top left repeat;
   color: #2c3e50;
   width: 100%;
   height: 100%;
@@ -107,6 +107,10 @@ body {
     border-radius: 0.35em;
     font-size: 1.25em;
   }
+}
+
+input::-webkit-input-placeholder {
+  color: #B0B0B0;
 }
 </style>
 

@@ -12,7 +12,7 @@
         <el-form-item label="IP" prop="IP">
           <el-input v-model="formLabelAlign.IP"></el-input>
         </el-form-item>
-        <el-form-item label="key_code" prop="session_id">
+        <el-form-item label="密钥" prop="session_id">
           <el-input
             v-model="formLabelAlign.session_id"
             @keyup.enter.native="submitForm()"
@@ -39,7 +39,7 @@ export default {
       },
       rules: {
         session_id: [
-          { required: true, message: "请输入您的密码", trigger: "change" }
+          { required: true, message: "请输入您的密钥", trigger: "change" }
         ],
         IP: [{ required: true, message: "请输入IP", trigger: "change" }]
       }
@@ -49,22 +49,30 @@ export default {
     submitForm() {
       localStorage.IP = this.formLabelAlign.IP;
       axios.defaults.baseURL = `http://${this.formLabelAlign.IP}`;
-      localStorage.password = '123';
       localStorage.session_id = this.formLabelAlign.session_id;
       this.electronSubmit();
     },
     electronSubmit() {
       this.$electron.ipcRenderer.send("main-message", {
-        demand:'session',
+        demand: "session",
         url: `http://${this.formLabelAlign.IP}`,
         name: "session_id",
         value: this.formLabelAlign.session_id
       });
-      this.$router.push("/home");
+      this.verifySubmit();
     },
+
+    async verifySubmit() {
+      const data = {};
+      const res = await this.$axios.patientReport(data);
+      if (res.error_code === "session not valid") {
+        this.$message.error("密钥无效");
+      } else {
+        this.$router.push("/home");
+      }
+    }
   },
-  mounted: function() {
-  },
+  mounted: function() {},
   watch: {}
 };
 </script>

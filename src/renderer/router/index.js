@@ -21,7 +21,7 @@ export default new Router({
       component: Home
     },
     {
-      path: '/patientDetail/:patient_pid',
+      path: '/patientDetail/:patient_name',
       name: 'PatientDetail',
       component: PatientDetail
     },

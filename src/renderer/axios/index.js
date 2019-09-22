@@ -21,6 +21,7 @@ axios.interceptors.response.use(function (response) {
     message: "服务器异常！请联系管理员检查服务器IP是否正确！",
     duration: 10000
   });
+  router.replace('/home');
   // 对响应错误做点什么
   return Promise.reject(error);
 });
