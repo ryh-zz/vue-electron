@@ -61,7 +61,13 @@ export default {
       }
       this.loading = true;
       const data = { patient_pid: `${this.inputValue}` };
-      const res = await this.$axios.patientReport(data);
+      let res;
+      console.log(localStorage.serviceVersion);
+      if (localStorage.serviceVersion === "1") {
+        res = await this.$axios.patientReport(data);
+      } else {
+        res = await this.$axios.patientReport2(data);
+      }
       if (res.error_code === "success") {
         this.$router.push(`/patientDetail/${res.patient_name}`);
       }

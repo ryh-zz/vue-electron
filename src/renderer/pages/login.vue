@@ -9,6 +9,12 @@
         :rules="rules"
         ref="login"
       >
+        <el-form-item label="版本" prop="IP">
+          <el-select v-model="formLabelAlign.serviceVersion" placeholder="请选择">
+            <el-option key="1" label="版本一" value="1"></el-option>
+            <el-option key="2" label="版本二" value="2"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="IP" prop="IP">
           <el-input v-model="formLabelAlign.IP"></el-input>
         </el-form-item>
@@ -33,7 +39,7 @@ export default {
       labelPosition: "left",
       loading: false,
       formLabelAlign: {
-        username: "",
+        serviceVersion: "1",
         session_id: "123",
         IP: "192.168.1.181"
       },
@@ -48,6 +54,7 @@ export default {
   methods: {
     submitForm() {
       localStorage.IP = this.formLabelAlign.IP;
+      localStorage.serviceVersion = this.formLabelAlign.serviceVersion;
       axios.defaults.baseURL = `http://${this.formLabelAlign.IP}`;
       localStorage.session_id = this.formLabelAlign.session_id;
       this.electronSubmit();
@@ -64,7 +71,12 @@ export default {
 
     async verifySubmit() {
       const data = {};
-      const res = await this.$axios.patientReport(data);
+      let res;
+      if (localStorage.serviceVersion === "1") {
+        res = await this.$axios.patientReport(data);
+      } else {
+        res = await this.$axios.patientReport2(data);
+      }
       if (res.error_code === "session not valid") {
         this.$message.error("密钥无效");
       } else {
@@ -93,7 +105,7 @@ export default {
     margin-top: -255px;
     box-sizing: border-box;
     width: 380px;
-    height: 300px;
+    height: 345px;
     padding: 45px 30px 40px;
     background: #fff;
     box-shadow: 0 20px 30px 0 rgba(63, 63, 65, 0.06);

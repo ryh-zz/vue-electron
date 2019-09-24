@@ -18,7 +18,7 @@ axios.interceptors.response.use(function (response) {
 }, function (error) {
   Message.error({
     showClose: true,
-    message: "服务器异常！请联系管理员检查服务器IP是否正确！",
+    message: "服务器异常！或者请求超时！",
     duration: 10000
   });
   router.replace('/home');
@@ -59,6 +59,7 @@ const axiosPost = (url, data) => {
       method: 'post',
       url: url,
       data: data,
+      timeout: 5000,
     })
       .then(function (res) {
         if (res.data.error_code === 'login_timeout') {
