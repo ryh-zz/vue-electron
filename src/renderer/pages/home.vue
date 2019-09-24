@@ -2,8 +2,7 @@
 <template>
   <div @click="getFocus" class="home">
     <div class="home-title">
-      <p>上海大图医疗科技有限公司</p>
-      <p>放射治疗报到机</p>
+      <p>自助报到机</p>
     </div>
     <input
       type="text"
@@ -20,14 +19,20 @@
     <div class="home-defeated">{{errorCode}}</div>
 
     <div class="home-keyboard">
-      <vue-touch-keyboard
-        :options="options"
-        v-if="visible"
-        :layout="layout"
-        :cancel="hide"
-        :accept="accept"
-        :input="input"
-      />
+      <div @click="inputDiv" :data-index="''" class="home-keyboard-number">
+        <div :data-index="1">1</div>
+        <div :data-index="2">2</div>
+        <div :data-index="3">3</div>
+        <div :data-index="0">0</div>
+        <div :data-index="4">4</div>
+        <div :data-index="5">5</div>
+        <div :data-index="6">6</div>
+        <p style="width:165px;"></p>
+        <div :data-index="7">7</div>
+        <div :data-index="8">8</div>
+        <div :data-index="9">9</div>
+        <div class="home-keyboard-number-del" :data-index="'删除'">删除</div>
+      </div>
     </div>
     <div class="home-set" @dblclick="goUserSet"></div>
   </div>
@@ -39,13 +44,6 @@ export default {
     return {
       dialogVisible: false,
       inputValue: "",
-      visible: false,
-      layout: "normal",
-      input: null,
-      options: {
-        useKbEvents: false,
-        preventClickEvent: false
-      },
       loading: false,
       errorCode: ""
     };
@@ -73,6 +71,9 @@ export default {
       if (res.error_code.indexOf("patient not exist") !== -1) {
         this.errorCode = "患者不存在!";
       }
+      if (res.error_code === "session not valid") {
+        this.errorCode = "管理员密匙不正确,无法报道！";
+      }
       this.loading = false;
       this.inputValue = "";
       this.delayedTime();
@@ -93,12 +94,27 @@ export default {
       this.$refs.codeInput.focus();
     },
 
-    accept(text) {
-      this.hide();
+    inputDiv(e) {
+      if (e.target.nodeName.toLowerCase() === "div") {
+        const index = e.target.dataset.index;
+        if (index === "删除") {
+          this.inputDivDel();
+        } else {
+          this.inputValue = this.inputValue + index;
+        }
+      }
     },
 
-    hide() {
-      this.visible = false;
+    inputDivDel() {
+      const index = this.$refs.codeInput.selectionStart;
+      if (index === 0) {
+        return;
+      }
+      let str = this.inputValue;
+      let arr = str.split("");
+      arr.splice(index - 1, 1);
+      str = arr.join("");
+      this.inputValue = str;
     }
   },
   mounted() {
@@ -129,7 +145,8 @@ export default {
     font-size: 36px;
     text-align: center;
     background: rgba(255, 255, 255, 1);
-    margin: 60px 0;
+    margin-top: 100px;
+    margin-bottom: 60px;
     border: none;
   }
   &-report {
@@ -149,21 +166,45 @@ export default {
   }
   &-defeated {
     font-size: 30px;
-    color: #ff8e8e;
+    color: #ff3535;
     font-family: SimHei;
     font-weight: 400;
+    height: 34px;
   }
   &-keyboard {
-    position: absolute;
     width: 100%;
-    bottom: 100px;
+    display: flex;
+    justify-content: center;
+    margin-top: 70px;
+    &-number {
+      display: flex;
+      flex-wrap: wrap;
+      width: 660px;
+      & > div {
+        width: 165px;
+        height: 125px;
+        background: url(../assets/keyboard.png);
+        font-size: 48px;
+        font-family: CenturyGothic;
+        font-weight: bold;
+        color: white;
+        line-height: 115px;
+      }
+      & > &-del {
+        height: 245px;
+        line-height: 240px;
+        background: url(../assets/keyboard_del.png);
+        position: relative;
+        bottom: 123px;
+      }
+    }
   }
   &-set {
     width: 50px;
     height: 50px;
     position: absolute;
     right: 0;
-    top: 250px;
+    top: 230px;
   }
 }
 </style>

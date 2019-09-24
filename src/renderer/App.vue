@@ -66,7 +66,7 @@ body {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #6bd3ff;
+  background-color: #005071;
   // background: url(./assets/login_bg.png) top left repeat;
   color: #2c3e50;
   width: 100%;
