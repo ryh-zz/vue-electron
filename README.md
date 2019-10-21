@@ -15,7 +15,7 @@ npm run dev
 npm run build
 
 # build 文件夹下 
-report Setup 0.0.1
+rtRegister Setup 2.0.0
 
 
 ```

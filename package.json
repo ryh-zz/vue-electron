@@ -1,6 +1,6 @@
 {
-  "name": "report",
-  "version": "0.0.1",
+  "name": "rt-register",
+  "version": "2.0.0",
   "author": "RYH <ryh19@qq.com>",
   "description": "An electron-vue project",
   "main": "./dist/electron/main.js",
@@ -16,7 +16,7 @@
     "postinstall": ""
   },
   "build": {
-    "productName": "report",
+    "productName": "rtRegister",
     "appId": "com.example.yourapp",
     "directories": {
       "output": "build"
