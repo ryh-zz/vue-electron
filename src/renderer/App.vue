@@ -18,7 +18,6 @@ export default {
   },
   mounted: function() {
     if (localStorage.session_id) {
-      // this.setCookie("session_id", localStorage.session_id, 0);
       this.$router.push("/home");
     }
   },
