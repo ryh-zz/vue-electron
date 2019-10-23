@@ -18,10 +18,10 @@ axios.interceptors.response.use(function (response) {
 }, function (error) {
   Message.error({
     showClose: true,
-    message: "服务器异常！或者请求超时！",
-    duration: 10000
+    message: "服务器异常！",
+    duration: 5000
   });
-  router.replace('/home');
+  // router.replace('/');
   // 对响应错误做点什么
   return Promise.reject(error);
 });

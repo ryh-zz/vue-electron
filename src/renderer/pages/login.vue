@@ -1,7 +1,7 @@
 
 <template>
   <div class="login">
-    <div class="login-main" v-loading="loading">
+    <div class="login-main" v-loading="isloading">
       <el-form
         :label-position="labelPosition"
         label-width="80px"
@@ -17,6 +17,9 @@
         </el-form-item>
         <el-form-item label="IP" prop="IP">
           <el-input v-model="formLabelAlign.IP"></el-input>
+        </el-form-item>
+        <el-form-item label="用户" prop="user">
+          <el-input v-model="formLabelAlign.user"></el-input>
         </el-form-item>
         <el-form-item label="密钥" prop="session_id">
           <el-input
@@ -37,28 +40,35 @@ export default {
   data() {
     return {
       labelPosition: "left",
-      loading: false,
+      isloading: false,
       formLabelAlign: {
         serviceVersion: "1",
+        user: "admin",
         session_id: "123",
-        IP: "192.168.1.181"
+        IP: "192.168.1.11"
       },
       rules: {
         session_id: [
           { required: true, message: "请输入您的密钥", trigger: "change" }
         ],
-        IP: [{ required: true, message: "请输入IP", trigger: "change" }]
+        IP: [{ required: true, message: "请输入IP", trigger: "change" }],
+        user: [{ required: true, message: "请输入用户名", trigger: "change" }]
       }
     };
   },
   methods: {
     submitForm() {
+      this.isloading = true;
+      this.verifySubmit();
+    },
+
+    vueSubmit() {
       localStorage.IP = this.formLabelAlign.IP;
       localStorage.serviceVersion = this.formLabelAlign.serviceVersion;
       axios.defaults.baseURL = `http://${this.formLabelAlign.IP}`;
       localStorage.session_id = this.formLabelAlign.session_id;
-      this.electronSubmit();
     },
+
     electronSubmit() {
       this.$electron.ipcRenderer.send("main-message", {
         demand: "session",
@@ -66,22 +76,35 @@ export default {
         name: "session_id",
         value: this.formLabelAlign.session_id
       });
-      this.verifySubmit();
     },
 
     async verifySubmit() {
+      await this.$refs.login.validate();
       const data = {};
-      let res;
-      if (localStorage.serviceVersion === "1") {
-        res = await this.$axios.patientReport(data);
-      } else {
-        res = await this.$axios.patientReport2(data);
+      try {
+        let res;
+        if (this.formLabelAlign.serviceVersion === "1") {
+          res = await this.$axios.patientReport(data);
+        } else {
+          res = await this.$axios.patientReport2(data);
+        }
+        if (res.error_code === "session not valid") {
+          this.$message.error("密钥无效");
+          this.isloading = false;
+        } else {
+          this.vueSubmit();
+          this.electronSubmit();
+          this.goHome();
+        }
+      } catch (error) {
+        setTimeout(() => {
+          this.isloading = false;
+        }, 1000);
       }
-      if (res.error_code === "session not valid") {
-        this.$message.error("密钥无效");
-      } else {
-        this.$router.push("/home");
-      }
+    },
+
+    goHome() {
+      this.$router.push("/home");
     }
   },
   mounted: function() {},
@@ -105,7 +128,7 @@ export default {
     margin-top: -255px;
     box-sizing: border-box;
     width: 380px;
-    height: 345px;
+    height: 410px;
     padding: 45px 30px 40px;
     background: #fff;
     box-shadow: 0 20px 30px 0 rgba(63, 63, 65, 0.06);

@@ -127,9 +127,33 @@ export default {
   methods: {
     submit() {
       this.isloading = true;
-      this.vueSubmit();
-      this.electronSubmit();
+      this.verifySubmit();
     },
+
+    async verifySubmit() {
+      const data = {};
+      let res;
+      try {
+        if (localStorage.serviceVersion === "1") {
+          res = await this.$axios.patientReport(data);
+        } else {
+          res = await this.$axios.patientReport2(data);
+        }
+        if (res.error_code === "session not valid") {
+          this.$message.error("密钥无效");
+          this.isloading = false;
+        } else {
+          this.vueSubmit();
+          this.electronSubmit();
+          this.goHome();
+        }
+      } catch (error) {
+        setTimeout(() => {
+          this.isloading = false;
+        }, 1000);
+      }
+    },
+
     vueSubmit() {
       const IP = `${this.IP}:${this.port}`;
       localStorage.IP = IP;
@@ -137,6 +161,7 @@ export default {
       localStorage.serviceVersion = this.serviceVersion;
       axios.defaults.baseURL = `http://${IP}`;
     },
+
     electronSubmit() {
       this.$electron.ipcRenderer.send("main-message", {
         demand: "session",
@@ -144,8 +169,8 @@ export default {
         name: "session_id",
         value: this.session_id
       });
-      this.verifySubmit();
     },
+
     goHome() {
       this.$router.push("/home");
     },
@@ -163,22 +188,6 @@ export default {
       }
     },
 
-    async verifySubmit() {
-      const data = {};
-      let res;
-      if (localStorage.serviceVersion === "1") {
-        res = await this.$axios.patientReport(data);
-      } else {
-        res = await this.$axios.patientReport2(data);
-      }
-      if (res.error_code === "session not valid") {
-        this.$message.error("密钥无效");
-      } else {
-        this.goHome();
-      }
-      this.isloading = true;
-    },
-
     appClose() {
       this.$electron.ipcRenderer.send("main-message", {
         demand: "close"
@@ -194,11 +203,13 @@ export default {
     }
   },
   mounted() {
-    const arryIP = localStorage.IP.split(":");
-    this.IP = arryIP[0];
-    this.port = arryIP[1] || "80";
-    this.session_id = localStorage.session_id;
-    this.serviceVersion = localStorage.serviceVersion;
+    if (localStorage.IP) {
+      const arryIP = localStorage.IP.split(":");
+      this.IP = arryIP[0];
+      this.port = arryIP[1] || "80";
+      this.session_id = localStorage.session_id;
+      this.serviceVersion = localStorage.serviceVersion;
+    }
   }
 };
 </script>
