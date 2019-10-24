@@ -13,23 +13,26 @@ export default new Router({
     {
       path: '/',
       name: 'Login',
-      component: Login
+      component: Login,
+      meta: { index: 0 },
     },
     {
       path: '/home',
       name: 'Home',
-      component: Home
-    },
-    {
-      path: '/patientDetail/:patient_name',
-      name: 'PatientDetail',
-      component: PatientDetail
+      component: Home,
+      meta: { index: 1 },
     },
     {
       path: '/userSet',
       name: 'UserSet',
-      component: UserSet
+      component: UserSet,
+      meta: { index: 2 },
     },
-    
+    {
+      path: '/patientDetail/:patient_name',
+      name: 'PatientDetail',
+      component: PatientDetail,
+      meta: { index: 3 },
+    },
   ]
 })

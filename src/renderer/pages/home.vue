@@ -61,28 +61,31 @@ export default {
       }
       this.loading = true;
       const data = { patient_pid: `${this.inputValue}` };
-      let res;
-      console.log(localStorage.serviceVersion);
-      if (localStorage.serviceVersion === "1") {
-        res = await this.$axios.patientReport(data);
-      } else {
-        res = await this.$axios.patientReport2(data);
+      try {
+        let res;
+        if (localStorage.serviceVersion === "1") {
+          res = await this.$axios.patientReport(data);
+        } else {
+          res = await this.$axios.patientReport2(data);
+        }
+        if (res.error_code === "success") {
+          this.$router.push(`/patientDetail/${res.patient_name}`);
+        }
+        if (res.error_code === "report exist") {
+          this.errorCode = "您已经报到过了!";
+        }
+        if (res.error_code.indexOf("patient not exist") !== -1) {
+          this.errorCode = "患者不存在!";
+        }
+        if (res.error_code === "session not valid") {
+          this.errorCode = "管理员密匙不正确,无法报道！";
+        }
+        this.loading = false;
+        this.inputValue = "";
+        this.delayedTime();
+      } catch (error) {
+        this.loading = false;
       }
-      if (res.error_code === "success") {
-        this.$router.push(`/patientDetail/${res.patient_name}`);
-      }
-      if (res.error_code === "report exist") {
-        this.errorCode = "您已经报到过了!";
-      }
-      if (res.error_code.indexOf("patient not exist") !== -1) {
-        this.errorCode = "患者不存在!";
-      }
-      if (res.error_code === "session not valid") {
-        this.errorCode = "管理员密匙不正确,无法报道！";
-      }
-      this.loading = false;
-      this.inputValue = "";
-      this.delayedTime();
     },
 
     delayedTime() {
