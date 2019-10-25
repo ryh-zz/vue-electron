@@ -18,9 +18,9 @@
         <el-form-item label="IP" prop="IP">
           <el-input v-model="formLabelAlign.IP"></el-input>
         </el-form-item>
-        <el-form-item label="用户" prop="user">
+        <!-- <el-form-item label="用户" prop="user">
           <el-input v-model="formLabelAlign.user"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="密钥" prop="session_id">
           <el-input
             v-model="formLabelAlign.session_id"
@@ -79,9 +79,9 @@ export default {
     },
 
     async verifySubmit() {
-      await this.$refs.login.validate();
       const data = {};
       try {
+        await this.$refs.login.validate();
         let res;
         if (this.formLabelAlign.serviceVersion === "1") {
           res = await this.$axios.patientReport(data);
@@ -97,9 +97,7 @@ export default {
           this.goHome();
         }
       } catch (error) {
-        setTimeout(() => {
-          this.isloading = false;
-        }, 1000);
+         this.isloading = false;
       }
     },
 
@@ -128,7 +126,7 @@ export default {
     margin-top: -255px;
     box-sizing: border-box;
     width: 380px;
-    height: 410px;
+    height: 360px;
     padding: 45px 30px 40px;
     background: #fff;
     box-shadow: 0 20px 30px 0 rgba(63, 63, 65, 0.06);
