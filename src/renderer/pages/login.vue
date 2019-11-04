@@ -29,7 +29,7 @@
             type="password"
           ></el-input>
         </el-form-item>
-        <el-button type="primary" @click="submitForm()" style="width: 100%;margin-top: 40px;">登陆</el-button>
+        <el-button type="primary" @click="submitForm()" style="width: 100%;margin-top: 40px;">登录</el-button>
       </el-form>
     </div>
     <vue-touch-keyboard
