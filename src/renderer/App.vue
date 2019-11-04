@@ -39,7 +39,6 @@ export default {
 
   watch: {
     $route(to, from) {
-      console.log(to,from)
       if (to.meta.index > from.meta.index) {
         this.transitionName = "slide-left";
       } else {

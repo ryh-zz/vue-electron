@@ -127,6 +127,8 @@ export default {
   methods: {
     submit() {
       this.isloading = true;
+      this.vueSubmit();
+      this.electronSubmit();
       this.verifySubmit();
     },
 
@@ -143,8 +145,6 @@ export default {
           this.$message.error("密钥无效");
           this.isloading = false;
         } else {
-          this.vueSubmit();
-          this.electronSubmit();
           this.goHome();
         }
       } catch (error) {

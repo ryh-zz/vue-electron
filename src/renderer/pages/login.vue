@@ -9,12 +9,12 @@
         :rules="rules"
         ref="login"
       >
-        <el-form-item label="版本" prop="IP">
+        <!-- <el-form-item label="版本" prop="IP">
           <el-select v-model="formLabelAlign.serviceVersion" placeholder="请选择">
             <el-option key="1" label="版本一" value="1"></el-option>
             <el-option key="2" label="版本二" value="2"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="IP" prop="IP">
           <el-input v-model="formLabelAlign.IP" @focus="getFocus($event)"></el-input>
         </el-form-item>
@@ -51,7 +51,7 @@ export default {
       labelPosition: "left",
       isloading: false,
       formLabelAlign: {
-        serviceVersion: "1",
+        serviceVersion: "2",
         user: "admin",
         session_id: "123",
         IP: "192.168.1.11"
@@ -76,6 +76,8 @@ export default {
   methods: {
     submitForm() {
       this.isloading = true;
+      this.vueSubmit();
+      this.electronSubmit();
       this.verifySubmit();
     },
 
@@ -109,8 +111,6 @@ export default {
           this.$message.error("密钥无效");
           this.isloading = false;
         } else {
-          this.vueSubmit();
-          this.electronSubmit();
           this.goHome();
         }
       } catch (error) {
@@ -153,7 +153,7 @@ export default {
     margin-top: -255px;
     box-sizing: border-box;
     width: 380px;
-    height: 360px;
+    height: 300px;
     padding: 45px 30px 40px;
     background: #fff;
     box-shadow: 0 20px 30px 0 rgba(63, 63, 65, 0.06);
