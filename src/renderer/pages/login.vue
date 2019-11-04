@@ -16,13 +16,14 @@
           </el-select>
         </el-form-item>
         <el-form-item label="IP" prop="IP">
-          <el-input v-model="formLabelAlign.IP"></el-input>
+          <el-input v-model="formLabelAlign.IP" @focus="getFocus($event)"></el-input>
         </el-form-item>
         <!-- <el-form-item label="用户" prop="user">
           <el-input v-model="formLabelAlign.user"></el-input>
-        </el-form-item> -->
+        </el-form-item>-->
         <el-form-item label="密钥" prop="session_id">
           <el-input
+            @focus="getFocus($event)"
             v-model="formLabelAlign.session_id"
             @keyup.enter.native="submitForm()"
             type="password"
@@ -31,6 +32,14 @@
         <el-button type="primary" @click="submitForm()" style="width: 100%;margin-top: 40px;">登陆</el-button>
       </el-form>
     </div>
+    <vue-touch-keyboard
+      :options="options"
+      v-if="visible"
+      :layout="layout"
+      :cancel="hide"
+      :accept="hide"
+      :input="input"
+    />
   </div>
 </template>
 <script>
@@ -53,7 +62,15 @@ export default {
         ],
         IP: [{ required: true, message: "请输入IP", trigger: "change" }],
         user: [{ required: true, message: "请输入用户名", trigger: "change" }]
-      }
+      },
+      // 键盘
+      options: {
+        useKbEvents: false,
+        preventClickEvent: false
+      },
+      visible: false,
+      layout: "normal",
+      input: null
     };
   },
   methods: {
@@ -97,12 +114,22 @@ export default {
           this.goHome();
         }
       } catch (error) {
-         this.isloading = false;
+        this.isloading = false;
       }
     },
 
     goHome() {
       this.$router.push("/home");
+    },
+
+    //键盘
+    hide() {
+      this.visible = false;
+    },
+
+    getFocus(event) {
+      if (!this.visible) this.visible = true;
+      this.input = event.target;
     }
   },
   mounted: function() {},
@@ -132,5 +159,11 @@ export default {
     box-shadow: 0 20px 30px 0 rgba(63, 63, 65, 0.06);
     border-radius: 10px;
   }
+}
+.vue-touch-keyboard{
+  width: 80%;
+  left: 10%;
+  position: absolute;
+  bottom: 100px;
 }
 </style>
