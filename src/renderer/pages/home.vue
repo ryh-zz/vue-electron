@@ -80,6 +80,9 @@ export default {
         if (res.error_code === "session not valid") {
           this.errorCode = "管理员密匙不正确,无法报道！";
         }
+        if (res.error_code === "plan not found") {
+          this.errorCode = "计划不存在！";
+        }
         this.loading = false;
         this.inputValue = "";
         this.delayedTime();
