@@ -53,8 +53,8 @@ export default {
       formLabelAlign: {
         serviceVersion: "2",
         user: "admin",
-        session_id: "123",
-        IP: "192.168.1.11"
+        session_id: "",
+        IP: ""
       },
       rules: {
         session_id: [

@@ -38,6 +38,7 @@
   </div>
 </template>
 <script>
+import { start } from "repl";
 export default {
   name: "Home",
   data() {
@@ -70,18 +71,18 @@ export default {
         }
         if (res.error_code === "success") {
           this.$router.push(`/patientDetail/${res.patient_name}`);
-        }
-        if (res.error_code === "report exist") {
+        } else if (res.error_code === "report exist") {
           this.errorCode = "您已经报到过了!";
-        }
-        if (res.error_code.indexOf("patient not exist") !== -1) {
+        } else if (res.error_code.indexOf("patient not exist") !== -1) {
           this.errorCode = "患者不存在!";
-        }
-        if (res.error_code === "session not valid") {
+        } else if (res.error_code === "session not valid") {
           this.errorCode = "管理员密匙不正确,无法报道！";
-        }
-        if (res.error_code === "plan not found") {
+        } else if (res.error_code === "plan not found") {
           this.errorCode = "计划不存在！";
+        } else if (res.error_code.indexOf("task not exist") !== -1) {
+          this.errorCode = "任务不存在！";
+        } else {
+          this.errorCode = res.error_code;
         }
         this.loading = false;
         this.inputValue = "";
@@ -118,15 +119,24 @@ export default {
     },
 
     inputDivDel() {
-      const index = this.$refs.codeInput.selectionStart;
-      if (index === 0) {
+      const start_index = this.$refs.codeInput.selectionStart;
+      const end_index = this.$refs.codeInput.selectionEnd;
+      let index;
+      if (start_index === 0  && end_index === 0) {
         return;
       }
-      let str = this.inputValue;
-      let arr = str.split("");
-      arr.splice(index - 1, 1);
-      str = arr.join("");
-      this.inputValue = str;
+      if ((start_index === end_index)) {
+        this.inputValue = this.inputValue.replace(this.inputValue[start_index - 1], "");
+        index = start_index - 1;
+      } else {
+        this.inputValue = this.inputValue.substring(0,start_index) + this.inputValue.substring(end_index);
+        index = start_index;
+      }
+
+      this.$nextTick(() => {
+        this.$refs.codeInput.selectionStart = index;
+        this.$refs.codeInput.selectionEnd = index;
+      });
     }
   },
   mounted() {
