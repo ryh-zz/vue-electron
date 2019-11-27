@@ -30,19 +30,6 @@
     <template v-else>
       <el-row :gutter="24" type="flex" align="middle">
         <el-col :span="6">
-          <div class="grid-content bg-purple">服务器版本：</div>
-        </el-col>
-        <el-col :span="18">
-          <div class="grid-content bg-purple">
-            <el-select v-model="serviceVersion" placeholder="请选择">
-              <el-option key="1" label="版本一" value="1"></el-option>
-              <el-option key="2" label="版本二" value="2"></el-option>
-            </el-select>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row :gutter="24" type="flex" align="middle">
-        <el-col :span="6">
           <div class="grid-content bg-purple">服务器IP：</div>
         </el-col>
         <el-col :span="18">
@@ -120,8 +107,6 @@ export default {
         useKbEvents: false,
         preventClickEvent: false
       },
-
-      serviceVersion: "1"
     };
   },
   methods: {
@@ -136,11 +121,7 @@ export default {
       const data = {};
       let res;
       try {
-        if (localStorage.serviceVersion === "1") {
-          res = await this.$axios.patientReport(data);
-        } else {
-          res = await this.$axios.patientReport2(data);
-        }
+         res = await this.$axios.patientReport2(data);
         if (res.error_code === "session not valid") {
           this.$message.error("密钥无效");
           this.isloading = false;
@@ -158,7 +139,6 @@ export default {
       const IP = `${this.IP}:${this.port}`;
       localStorage.IP = IP;
       localStorage.session_id = this.session_id;
-      localStorage.serviceVersion = this.serviceVersion;
       axios.defaults.baseURL = `http://${IP}`;
     },
 
@@ -208,7 +188,6 @@ export default {
       this.IP = arryIP[0];
       this.port = arryIP[1] || "80";
       this.session_id = localStorage.session_id;
-      this.serviceVersion = localStorage.serviceVersion;
     }
   }
 };

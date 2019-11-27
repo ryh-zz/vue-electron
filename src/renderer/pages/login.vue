@@ -9,12 +9,6 @@
         :rules="rules"
         ref="login"
       >
-        <!-- <el-form-item label="版本" prop="IP">
-          <el-select v-model="formLabelAlign.serviceVersion" placeholder="请选择">
-            <el-option key="1" label="版本一" value="1"></el-option>
-            <el-option key="2" label="版本二" value="2"></el-option>
-          </el-select>
-        </el-form-item> -->
         <el-form-item label="IP" prop="IP">
           <el-input v-model="formLabelAlign.IP" @focus="getFocus($event)"></el-input>
         </el-form-item>
@@ -51,7 +45,6 @@ export default {
       labelPosition: "left",
       isloading: false,
       formLabelAlign: {
-        serviceVersion: "2",
         user: "admin",
         session_id: "",
         IP: ""
@@ -83,7 +76,6 @@ export default {
 
     vueSubmit() {
       localStorage.IP = this.formLabelAlign.IP;
-      localStorage.serviceVersion = this.formLabelAlign.serviceVersion;
       axios.defaults.baseURL = `http://${this.formLabelAlign.IP}`;
       localStorage.session_id = this.formLabelAlign.session_id;
     },
@@ -102,11 +94,7 @@ export default {
       try {
         await this.$refs.login.validate();
         let res;
-        if (this.formLabelAlign.serviceVersion === "1") {
-          res = await this.$axios.patientReport(data);
-        } else {
-          res = await this.$axios.patientReport2(data);
-        }
+        res = await this.$axios.patientReport2(data);
         if (res.error_code === "session not valid") {
           this.$message.error("密钥无效");
           this.isloading = false;
@@ -160,7 +148,7 @@ export default {
     border-radius: 10px;
   }
 }
-.vue-touch-keyboard{
+.vue-touch-keyboard {
   width: 80%;
   left: 10%;
   position: absolute;

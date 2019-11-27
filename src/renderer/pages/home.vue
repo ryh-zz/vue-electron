@@ -39,6 +39,8 @@
 </template>
 <script>
 import { start } from "repl";
+import errorCodeFun from "../errorCode";
+
 export default {
   name: "Home",
   data() {
@@ -63,26 +65,11 @@ export default {
       this.loading = true;
       const data = { patient_pid: `${this.inputValue}` };
       try {
-        let res;
-        if (localStorage.serviceVersion === "1") {
-          res = await this.$axios.patientReport(data);
-        } else {
-          res = await this.$axios.patientReport2(data);
-        }
+        const res = await this.$axios.patientReport2(data);
         if (res.error_code === "success") {
           this.$router.push(`/patientDetail/${res.patient_name}`);
-        } else if (res.error_code === "report exist") {
-          this.errorCode = "您已经报到过了!";
-        } else if (res.error_code.indexOf("patient not exist") !== -1) {
-          this.errorCode = "患者不存在!";
-        } else if (res.error_code === "session not valid") {
-          this.errorCode = "管理员密匙不正确,无法报道！";
-        } else if (res.error_code === "plan not found") {
-          this.errorCode = "计划不存在！";
-        } else if (res.error_code.indexOf("task not exist") !== -1) {
-          this.errorCode = "任务不存在！";
         } else {
-          this.errorCode = res.error_code;
+          this.errorCode = errorCodeFun.patientReport2Error(res.error_code);
         }
         this.loading = false;
         this.inputValue = "";
@@ -122,14 +109,19 @@ export default {
       const start_index = this.$refs.codeInput.selectionStart;
       const end_index = this.$refs.codeInput.selectionEnd;
       let index;
-      if (start_index === 0  && end_index === 0) {
+      if (start_index === 0 && end_index === 0) {
         return;
       }
-      if ((start_index === end_index)) {
-        this.inputValue = this.inputValue.replace(this.inputValue[start_index - 1], "");
+      if (start_index === end_index) {
+        this.inputValue = this.inputValue.replace(
+          this.inputValue[start_index - 1],
+          ""
+        );
         index = start_index - 1;
       } else {
-        this.inputValue = this.inputValue.substring(0,start_index) + this.inputValue.substring(end_index);
+        this.inputValue =
+          this.inputValue.substring(0, start_index) +
+          this.inputValue.substring(end_index);
         index = start_index;
       }
 
