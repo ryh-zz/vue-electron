@@ -23,6 +23,9 @@ const patientReport2Error = (error) => {
         case 'patient already reported':
             data = '您已经报到过了！'
             break;
+        case 'previous schdule not report':
+            data = '报到异常，请联系治疗师处理！'
+            break;
         case 'not report time yet':
             data = '未到报到时间'
             break;
