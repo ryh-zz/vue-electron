@@ -18,10 +18,10 @@ const patientReport2Error = (error) => {
             data = '编辑报到错误'
             break;
         case 'report already exist':
-            data = '您已经报到过了！'
+            data = '报到异常！'
             break;
         case 'patient already reported':
-            data = '您已经报到过了！'
+            data = '报到异常！'
             break;
         case 'previous schdule not report':
             data = '报到异常，请联系治疗师处理！'
